@@ -20,7 +20,7 @@ if(req.method==='POST'&&!['admin','rh','prevencao'].includes(profile.perfil))ret
 const input=req.method==='POST'?(req.body||{}):{};
 if(req.method==='POST'&&JSON.stringify(input).length>2000000)return res.status(413).json({error:'Arquivo muito grande'});
 const payload={p_token:secret,p_metodo:req.method==='GET'?'ler':'gravar',p_dados:input.dados??null,p_revisao:input.revisao??null};
-const response=await fetch(base+'/rest/v1/rpc/rh_armarios_sync',{method:'POST',headers:{'Content-Type':'application/json',apikey:key,Authorization:'Bearer '+key},body:JSON.stringify(payload)});
+const response=await fetch(base+'/rest/v1/rpc/rh_armarios_sync',{method:'POST',headers:{'Content-Type':'application/json',apikey:key,Authorization:'Bearer '+access},body:JSON.stringify(payload)});
 const value=await response.json();
 if(!response.ok)return res.status((value.message||'').includes('CONFLITO')?409:400).json({error:value.message||'Erro no banco'});
 return res.status(200).json(value);
